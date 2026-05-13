@@ -12,6 +12,7 @@ public class dashboardFormController implements Initializable {
     @FXML private com.jfoenix.controls.JFXButton btnCapture;
     @FXML private com.jfoenix.controls.JFXButton btnScreenshot;
     @FXML private com.jfoenix.controls.JFXButton btnBrowse;
+    @FXML private com.jfoenix.controls.JFXButton btnHistory;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,6 +61,19 @@ public class dashboardFormController implements Initializable {
     @FXML
     private void handleCapture() {
         util.CaptureUtils.openLiveCamera(this::handleImageCaptured);
+    }
+
+    @FXML
+    private void handleHistory() {
+        try {
+            javafx.scene.Parent root = javafx.fxml.FXMLLoader.load(getClass().getResource("/view/HistoryForm.fxml"));
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Scan History");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.show();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleImageCaptured(javafx.scene.image.Image img) {
