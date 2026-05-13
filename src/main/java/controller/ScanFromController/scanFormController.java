@@ -1,15 +1,17 @@
-package controller.ScanFromController;
-
 import com.jfoenix.controls.JFXComboBox;
+import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import util.CaptureUtils;
 import util.SharedContext;
 
@@ -51,6 +53,7 @@ public class scanFormController implements Initializable, scanService {
         languageBox.getItems().setAll("Sinhala", "English", "Tamil");
         languageBox.getSelectionModel().selectFirst();
         setupButtonHandlers();
+        setupAnimations();
         
         mainImageView = new ImageView();
         leftImagePane.getChildren().add(mainImageView);
@@ -64,6 +67,32 @@ public class scanFormController implements Initializable, scanService {
         if (selected != null) {
             displayMainImage(selected);
         }
+    }
+
+    private void setupAnimations() {
+        addGlowHover(captureButton, "#6366F1", 18.0, true);
+        addGlowHover(recognizeButton, "#6366F1", 18.0, true);
+        addGlowHover(screenshotButton, "#6366F1", 12.0, false);
+        addGlowHover(addButton, "#6366F1", 12.0, false);
+        addGlowHover(rotateButton, "#A855F7", 10.0, false);
+        addGlowHover(deleteButton, "#FF4757", 10.0, false);
+        addGlowHover(copyButton, "#22D3EE", 10.0, false);
+        addGlowHover(saveButton, "#22D3EE", 10.0, false);
+    }
+
+    private void addGlowHover(Node node, String glowColor, double radius, boolean primary) {
+        if (node == null) return;
+        DropShadow idleGlow = new DropShadow(radius, Color.web(glowColor + "88"));
+        DropShadow hoverGlow = new DropShadow(radius * 1.8, Color.web(glowColor));
+        if (primary) node.setEffect(idleGlow);
+
+        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(160), node);
+        scaleUp.setToX(1.07); scaleUp.setToY(1.07);
+        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(160), node);
+        scaleDown.setToX(1.0); scaleDown.setToY(1.0);
+
+        node.setOnMouseEntered(e -> { scaleUp.playFromStart(); node.setEffect(hoverGlow); });
+        node.setOnMouseExited(e -> { scaleDown.playFromStart(); node.setEffect(primary ? idleGlow : null); });
     }
     
     private void refreshThumbnails() {
@@ -120,9 +149,9 @@ public class scanFormController implements Initializable, scanService {
                 stackPane.setLayoutY(5);
                 
                 if (img == selected) {
-                    thumbContainer.setStyle("-fx-background-color: #1D2A44; -fx-background-radius: 8; -fx-border-color: #00FF00; -fx-border-width: 2; -fx-border-radius: 8; -fx-cursor: hand;");
+                    thumbContainer.setStyle("-fx-background-color: rgba(99,102,241,0.25); -fx-background-radius: 8; -fx-border-color: #6366F1; -fx-border-width: 2; -fx-border-radius: 8; -fx-cursor: hand;");
                 } else {
-                    thumbContainer.setStyle("-fx-background-color: #1D2A44; -fx-background-radius: 8; -fx-border-color: #0D99FF; -fx-border-width: 1; -fx-border-radius: 8; -fx-cursor: hand;");
+                    thumbContainer.setStyle("-fx-background-color: rgba(15,23,42,0.7); -fx-background-radius: 8; -fx-border-color: rgba(99,102,241,0.3); -fx-border-width: 1; -fx-border-radius: 8; -fx-cursor: hand;");
                 }
                 
                 thumbContainer.setOnMouseEntered(e -> overlay.setVisible(true));
@@ -256,7 +285,7 @@ public class scanFormController implements Initializable, scanService {
         
         VBox root = new VBox(15);
         root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-background-color: #1D2A44; -fx-background-radius: 16; -fx-border-color: #0D99FF; -fx-border-width: 2; -fx-border-radius: 16; -fx-padding: 30;");
+        root.setStyle("-fx-background-color: rgba(15,23,42,0.95); -fx-background-radius: 24; -fx-border-color: rgba(99,102,241,0.5); -fx-border-width: 1; -fx-border-radius: 24; -fx-padding: 30;");
         
         Label title = new Label("Choose Source to Retake");
         title.setStyle("-fx-text-fill: white; -fx-font-family: 'Poppins'; -fx-font-size: 18px; -fx-font-weight: bold;");
@@ -299,9 +328,9 @@ public class scanFormController implements Initializable, scanService {
         Button btn = new Button(text);
         btn.setPrefWidth(200);
         btn.setPrefHeight(40);
-        btn.setStyle("-fx-background-color: transparent; -fx-border-color: " + color + "; -fx-text-fill: white; -fx-border-radius: 8; -fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-cursor: hand;");
+        btn.setStyle("-fx-background-color: rgba(30,41,59,0.8); -fx-border-color: " + color + "; -fx-text-fill: white; -fx-border-radius: 8; -fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-cursor: hand;");
         btn.setOnMouseEntered(e -> btn.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-border-radius: 8; -fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-cursor: hand;"));
-        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: transparent; -fx-border-color: " + color + "; -fx-text-fill: white; -fx-border-radius: 8; -fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-cursor: hand;"));
+        btn.setOnMouseExited(e -> btn.setStyle("-fx-background-color: rgba(30,41,59,0.8); -fx-border-color: " + color + "; -fx-text-fill: white; -fx-border-radius: 8; -fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-cursor: hand;"));
         return btn;
     }
     

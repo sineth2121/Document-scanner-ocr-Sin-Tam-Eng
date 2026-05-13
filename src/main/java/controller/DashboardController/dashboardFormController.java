@@ -1,8 +1,13 @@
 package controller.DashboardController;
 
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,8 +22,44 @@ public class dashboardFormController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupDragAndDrop();
+        setupAnimations();
     }
-    
+
+    // ─── Smooth Hover Animations ───────────────────────────────────────────
+    private void setupAnimations() {
+        addGlowHover(btnCapture, "#6366F1", 22.0, true);
+        addGlowHover(btnScreenshot, "#6366F1", 16.0, false);
+        addGlowHover(btnBrowse, "#6366F1", 16.0, false);
+        addGlowHover(btnHistory, "#A855F7", 14.0, false);
+    }
+
+    private void addGlowHover(Node node, String glowColor, double radius, boolean primary) {
+        DropShadow idleGlow = new DropShadow(radius, Color.web(glowColor + "88"));
+        DropShadow hoverGlow = new DropShadow(radius * 1.8, Color.web(glowColor));
+
+        if (primary) {
+            node.setEffect(idleGlow);
+        }
+
+        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(180), node);
+        scaleUp.setToX(1.07);
+        scaleUp.setToY(1.07);
+
+        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(180), node);
+        scaleDown.setToX(1.0);
+        scaleDown.setToY(1.0);
+
+        node.setOnMouseEntered(e -> {
+            scaleUp.playFromStart();
+            node.setEffect(hoverGlow);
+        });
+        node.setOnMouseExited(e -> {
+            scaleDown.playFromStart();
+            node.setEffect(primary ? idleGlow : null);
+        });
+    }
+
+    // ─── Drag & Drop ───────────────────────────────────────────────────────
     private void setupDragAndDrop() {
         dropPane.setOnDragOver(e -> {
             if (e.getDragboard().hasFiles()) {
@@ -26,7 +67,7 @@ public class dashboardFormController implements Initializable {
             }
             e.consume();
         });
-        
+
         dropPane.setOnDragDropped(e -> {
             boolean success = false;
             if (e.getDragboard().hasFiles()) {
@@ -82,7 +123,7 @@ public class dashboardFormController implements Initializable {
             navigateToScanForm();
         }
     }
-    
+
     private void navigateToScanForm() {
         try {
             javafx.stage.Stage stage = (javafx.stage.Stage) dropPane.getScene().getWindow();

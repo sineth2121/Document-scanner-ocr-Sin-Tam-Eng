@@ -1,5 +1,6 @@
 package controller.HistoryController;
 
+import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,13 +11,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import util.SharedContext;
 
 import java.io.File;
@@ -51,7 +55,7 @@ public class historyFormController implements Initializable {
     private VBox createSessionCard(File sessionFolder) {
         VBox card = new VBox(10);
         card.setAlignment(Pos.CENTER);
-        card.setStyle("-fx-background-color: #1D2A44; -fx-background-radius: 12; -fx-border-color: #0D99FF; -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 10;");
+        card.setStyle("-fx-background-color: rgba(15,23,42,0.78); -fx-background-radius: 18; -fx-border-color: rgba(99,102,241,0.45); -fx-border-radius: 18; -fx-border-width: 1; -fx-padding: 10; -fx-cursor: hand;");
         card.setPrefWidth(200);
         card.setPrefHeight(250);
 
@@ -67,11 +71,31 @@ public class historyFormController implements Initializable {
         imageView.setPreserveRatio(true);
 
         Label nameLabel = new Label(sessionFolder.getName());
-        nameLabel.setStyle("-fx-text-fill: white; -fx-font-family: 'Poppins'; -fx-font-size: 14px;");
+        nameLabel.setStyle("-fx-text-fill: rgba(220,220,255,0.9); -fx-font-family: 'Poppins'; -fx-font-size: 13px;");
 
         // 3-dot Menu
         MenuButton menuButton = new MenuButton("⋮");
-        menuButton.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18px; -fx-cursor: hand;");
+        menuButton.setStyle("-fx-background-color: transparent; -fx-text-fill: rgba(200,200,255,0.8); -fx-font-size: 18px; -fx-cursor: hand;");
+
+        // Hover glow animation on card
+        DropShadow idleGlow = new DropShadow(12, Color.web("#6366F188"));
+        DropShadow hoverGlow = new DropShadow(28, Color.web("#6366F1"));
+        card.setEffect(idleGlow);
+
+        ScaleTransition scaleUp = new ScaleTransition(Duration.millis(170), card);
+        scaleUp.setToX(1.04); scaleUp.setToY(1.04);
+        ScaleTransition scaleDown = new ScaleTransition(Duration.millis(170), card);
+        scaleDown.setToX(1.0); scaleDown.setToY(1.0);
+        card.setOnMouseEntered(e -> {
+            scaleUp.playFromStart();
+            card.setEffect(hoverGlow);
+            card.setStyle("-fx-background-color: rgba(25,33,55,0.92); -fx-background-radius: 18; -fx-border-color: #6366F1; -fx-border-radius: 18; -fx-border-width: 1.5; -fx-padding: 10; -fx-cursor: hand;");
+        });
+        card.setOnMouseExited(e -> {
+            scaleDown.playFromStart();
+            card.setEffect(idleGlow);
+            card.setStyle("-fx-background-color: rgba(15,23,42,0.78); -fx-background-radius: 18; -fx-border-color: rgba(99,102,241,0.45); -fx-border-radius: 18; -fx-border-width: 1; -fx-padding: 10; -fx-cursor: hand;");
+        });
         
         MenuItem editItem = new MenuItem("Edit");
         editItem.setStyle("-fx-font-family: 'Poppins';");
