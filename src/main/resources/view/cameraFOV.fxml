@@ -9,8 +9,8 @@
 
 <AnchorPane prefHeight="825.0" prefWidth="1264.0" style="-fx-background-color: #071A3A;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CameraFOVController.cameraFOVFormController">
    <children>
-      <AnchorPane layoutX="50.0" layoutY="100.0" prefHeight="589.0" prefWidth="936.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed;" />
-      <JFXButton blendMode="SCREEN" layoutX="1013.0" layoutY="232.0" prefHeight="93.0" prefWidth="207.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Capture" textFill="WHITE">
+      <AnchorPane fx:id="cameraPane" layoutX="50.0" layoutY="100.0" prefHeight="589.0" prefWidth="936.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed;" />
+      <JFXButton fx:id="captureButton" blendMode="SCREEN" layoutX="1013.0" layoutY="232.0" onAction="#captureImage" prefHeight="93.0" prefWidth="207.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Capture" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="16.0" />
          </font>
@@ -22,7 +22,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton blendMode="SCREEN" layoutX="1048.0" layoutY="359.0" prefHeight="59.0" prefWidth="137.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Retake" textFill="WHITE">
+      <JFXButton fx:id="retakeButton" blendMode="SCREEN" layoutX="1048.0" layoutY="359.0" onAction="#retakeImage" prefHeight="59.0" prefWidth="137.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Retake" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="16.0" />
          </font>
@@ -34,7 +34,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton blendMode="SCREEN" layoutX="14.0" layoutY="14.0" prefHeight="59.0" prefWidth="111.0" style="-fx-background-color: none; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: none;" text="    Back" textFill="WHITE">
+      <JFXButton fx:id="backButton" blendMode="SCREEN" layoutX="14.0" layoutY="14.0" onAction="#goBack" prefHeight="59.0" prefWidth="111.0" style="-fx-background-color: none; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: none;" text="    Back" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="16.0" />
          </font>
@@ -46,7 +46,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton blendMode="SCREEN" layoutX="1059.0" layoutY="731.0" prefHeight="59.0" prefWidth="137.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Use this" textFill="WHITE">
+      <JFXButton fx:id="useThisButton" blendMode="SCREEN" layoutX="1059.0" layoutY="731.0" onAction="#useThis" prefHeight="59.0" prefWidth="137.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Use this" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="16.0" />
          </font>
@@ -58,7 +58,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <AnchorPane layoutX="58.0" layoutY="716.0" prefHeight="84.0" prefWidth="80.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed;">
+      <AnchorPane fx:id="imageThumb1" layoutX="58.0" layoutY="716.0" onMouseClicked="#browseBrowse" prefHeight="84.0" prefWidth="80.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed; -fx-cursor: hand;">
          <children>
             <ImageView fitHeight="43.0" fitWidth="50.0" layoutX="19.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -67,7 +67,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="153.0" layoutY="716.0" prefHeight="84.0" prefWidth="80.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed;">
+      <AnchorPane fx:id="imageThumb2" layoutX="153.0" layoutY="716.0" onMouseClicked="#browseBrowse" prefHeight="84.0" prefWidth="80.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed; -fx-cursor: hand;">
          <children>
             <ImageView fitHeight="43.0" fitWidth="50.0" layoutX="19.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -76,7 +76,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="246.0" layoutY="716.0" prefHeight="84.0" prefWidth="80.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed;">
+      <AnchorPane fx:id="imageThumb3" layoutX="246.0" layoutY="716.0" onMouseClicked="#browseBrowse" prefHeight="84.0" prefWidth="80.0" style="-fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-background-radius: 24; -fx-border-radius: 24; -fx-border-style: dashed; -fx-cursor: hand;">
          <children>
             <ImageView fitHeight="43.0" fitWidth="50.0" layoutX="19.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="851.0" prefWidth="1443.0" style="-fx-background-color: #071A3A;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScanFromController.scanFormController">
+<AnchorPane prefHeight="851.0" prefWidth="1443.0" stylesheets="@../css/style.css" style="-fx-background-color: #071A3A;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScanFromController.scanFormController">
    <children>
-      <JFXButton blendMode="SCREEN" contentDisplay="TOP" layoutX="118.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Capture" textFill="WHITE">
+      <JFXButton fx:id="captureButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="118.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Capture" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="12.0" />
          </font>
@@ -22,7 +22,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton contentDisplay="TOP" layoutX="204.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Screen Shots" textFill="WHITE">
+      <JFXButton fx:id="screenshotButton" contentDisplay="TOP" layoutX="204.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Screen Shots" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="12.0" />
          </font>
@@ -34,7 +34,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton contentDisplay="TOP" layoutX="289.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Add" textFill="WHITE">
+      <JFXButton fx:id="addButton" contentDisplay="TOP" layoutX="289.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Add" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="12.0" />
          </font>
@@ -46,10 +46,15 @@
             </ImageView>
          </graphic>
       </JFXButton>
+      <javafx.scene.control.ScrollPane layoutX="400.0" layoutY="23.0" prefHeight="95.0" prefWidth="750.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToHeight="true" fitToWidth="false">
+         <content>
+            <javafx.scene.layout.HBox fx:id="thumbnailBox" alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: transparent;" />
+         </content>
+      </javafx.scene.control.ScrollPane>
       <AnchorPane layoutX="110.0" layoutY="128.0" prefHeight="710.0" prefWidth="693.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16; -fx-border-radius: 16;">
          <children>
-            <AnchorPane blendMode="SCREEN" prefHeight="609.0" prefWidth="712.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16;" />
-            <JFXButton blendMode="SCREEN" contentDisplay="TOP" layoutX="10.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Rotate" textFill="WHITE">
+            <AnchorPane fx:id="leftImagePane" blendMode="SCREEN" prefHeight="609.0" prefWidth="712.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16;" />
+            <JFXButton fx:id="rotateButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="10.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Rotate" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
@@ -61,7 +66,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton blendMode="SCREEN" contentDisplay="TOP" layoutX="90.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Delete" textFill="RED">
+            <JFXButton fx:id="deleteButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="90.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Delete" textFill="RED">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
@@ -73,7 +78,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton blendMode="SCREEN" layoutX="514.0" layoutY="628.0" prefHeight="68.0" prefWidth="181.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Recognize" textFill="WHITE">
+            <JFXButton fx:id="recognizeButton" blendMode="SCREEN" layoutX="514.0" layoutY="628.0" prefHeight="68.0" prefWidth="181.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Recognize" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="16.0" />
                </font>
@@ -90,7 +95,7 @@
       <AnchorPane layoutX="829.0" layoutY="126.0" prefHeight="710.0" prefWidth="603.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16; -fx-border-radius: 16;">
          <children>
             <AnchorPane blendMode="SCREEN" prefHeight="609.0" prefWidth="603.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16;" />
-            <JFXButton blendMode="SCREEN" contentDisplay="TOP" layoutX="6.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Copy" textFill="WHITE">
+            <JFXButton fx:id="copyButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="6.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Copy" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
