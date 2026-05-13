@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="851.0" prefWidth="1443.0" stylesheets="@../css/style.css" style="-fx-background-color: #071A3A;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScanFromController.scanFormController">
+   <children>
+      <JFXButton fx:id="captureButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="118.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Capture" textFill="WHITE">
+         <font>
+            <Font name="Poppins Regular" size="12.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Camera_208px.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="screenshotButton" contentDisplay="TOP" layoutX="204.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Screen Shots" textFill="WHITE">
+         <font>
+            <Font name="Poppins Regular" size="12.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/screenshot_480px.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="addButton" contentDisplay="TOP" layoutX="289.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-border-radius: 8; -fx-background-color: #1D2A44; -fx-border-color: #0D99FF; -fx-border-style: dashed; -fx-background-radius: 8;" text="Add" textFill="WHITE">
+         <font>
+            <Font name="Poppins Regular" size="12.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/add_layer_512px.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <javafx.scene.control.ScrollPane layoutX="400.0" layoutY="23.0" prefHeight="95.0" prefWidth="750.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToHeight="true" fitToWidth="false">
+         <content>
+            <javafx.scene.layout.HBox fx:id="thumbnailBox" alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: transparent;" />
+         </content>
+      </javafx.scene.control.ScrollPane>
+      <AnchorPane layoutX="110.0" layoutY="128.0" prefHeight="710.0" prefWidth="693.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16; -fx-border-radius: 16;">
+         <children>
+            <AnchorPane fx:id="leftImagePane" blendMode="SCREEN" prefHeight="609.0" prefWidth="712.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16;" />
+            <JFXButton fx:id="rotateButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="10.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Rotate" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="12.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/rotate_500px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="deleteButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="90.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Delete" textFill="RED">
+               <font>
+                  <Font name="Poppins Regular" size="12.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/delete_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton fx:id="recognizeButton" blendMode="SCREEN" layoutX="514.0" layoutY="628.0" prefHeight="68.0" prefWidth="181.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 16; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="    Recognize" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="16.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="28.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/portrait_mode_scanning_240px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="829.0" layoutY="126.0" prefHeight="710.0" prefWidth="603.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16; -fx-border-radius: 16;">
+         <children>
+            <AnchorPane blendMode="SCREEN" prefHeight="609.0" prefWidth="603.0" style="-fx-background-color: #1D2A44; -fx-background-radius: 16;" />
+            <JFXButton fx:id="copyButton" blendMode="SCREEN" contentDisplay="TOP" layoutX="6.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Copy" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="12.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/copy_208px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton blendMode="SCREEN" contentDisplay="TOP" layoutX="86.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Save" textFill="#00eeff">
+               <font>
+                  <Font name="Poppins Regular" size="12.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/save_96px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+            <JFXButton layoutX="463.0" layoutY="631.0" prefHeight="55.0" prefWidth="118.0" style="-fx-background-color: #1D2A44; -fx-border-radius: 10,100; -fx-background-radius: 16; -fx-border-color: #0D99FF;" text="EXPORT" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="16.0" />
+               </font>
+            </JFXButton>
+            <JFXComboBox fx:id="languageBox1" focusColor="AQUA" layoutX="373.0" layoutY="653.0" prefHeight="25.0" prefWidth="77.0" promptText="PDF" style="-fx-text-fill: white;" unFocusColor="WHITE" visibleRowCount="3" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="851.0" prefWidth="99.0" style="-fx-background-color: #1D2A44;">
+         <children>
+            <ImageView fitHeight="59.0" fitWidth="60.0" layoutX="20.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/logo.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="34.0" fitWidth="30.0" layoutX="1203.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/language_480px.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="1243.0" layoutY="51.0" text="language" textFill="WHITE">
+         <font>
+            <Font name="Poppins Regular" size="16.0" />
+         </font>
+      </Label>
+      <JFXComboBox fx:id="languageBox" focusColor="AQUA" layoutX="1333.0" layoutY="48.0" prefHeight="25.0" prefWidth="77.0" promptText="Sinhala" style="-fx-text-fill: white;" unFocusColor="WHITE" visibleRowCount="3" />
+   </children>
+</AnchorPane>
