@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9c704b50-e9c4-4a2d-b7b4-71f209bf3154" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Starter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Starter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/CameraFOVController/cameraFOVController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/CameraFOVController/cameraFOVController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/CameraFOVController/cameraFOVFormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/CameraFOVController/cameraFOVFormController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/CameraFOVController/cameraFOVService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/CameraFOVController/cameraFOVService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/DashboardController/dashboardFormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/DashboardController/dashboardFormController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/ScanFromController/scanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/ScanFromController/scanController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/ScanFromController/scanFormController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/ScanFromController/scanFormController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/ScanFromController/scanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/ScanFromController/scanService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/Dashboard.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/Dashboard.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/ScanForm.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/ScanForm.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/view/cameraFOV.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/view/cameraFOV.fxml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "naveennisalka"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/sineth2121/Document-scanner-ocr-Sin-Tam-Eng.git",
+    "accountId": "2bb515bb-ca5c-4819-9ffe-907f9cedd1e8"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="3DJ627giHbcLxLyFhY34FDwXOl5" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.Starter.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/ECS/Sem 5 (Year of Study 3 )/CD/New folder/Document-scanner-ocr-Sin-Tam-Eng",
+    "onboarding.tips.debug.path": "D:/ECS/Sem 5 (Year of Study 3 )/CD/untitled/src/main/java/org/example/mvc/Main.java"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="untitled" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9c704b50-e9c4-4a2d-b7b4-71f209bf3154" name="Changes" comment="" />
+      <created>1777987617387</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777987617387</updated>
+    </task>
+    <servers />
+  </component>
+</project>
