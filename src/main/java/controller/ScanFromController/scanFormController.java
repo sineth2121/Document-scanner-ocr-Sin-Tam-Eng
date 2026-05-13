@@ -38,6 +38,7 @@ public class scanFormController implements Initializable, scanService {
     @FXML private Button deleteButton;
     @FXML private Button recognizeButton;
     @FXML private Button copyButton;
+    @FXML private Button saveButton;
     
     @FXML private HBox thumbnailBox;
     @FXML private AnchorPane leftImagePane;
@@ -221,6 +222,7 @@ public class scanFormController implements Initializable, scanService {
         if (deleteButton != null) deleteButton.setOnAction(e -> deleteImage());
         if (recognizeButton != null) recognizeButton.setOnAction(e -> recognizeText());
         if (copyButton != null) copyButton.setOnAction(e -> copyText());
+        if (saveButton != null) saveButton.setOnAction(e -> saveImages());
     }
     
     @FXML
@@ -373,6 +375,29 @@ public class scanFormController implements Initializable, scanService {
     @FXML
     private void copyText() {
         System.out.println("Copy button clicked");
+    }
+    
+    @FXML
+    private void saveImages() {
+        if (SharedContext.getInstance().getCapturedImages().isEmpty()) {
+            System.out.println("No images to save!");
+            return;
+        }
+        
+        controller.HistoryController.HistoryService historyService = new controller.HistoryController.historyController();
+        String sessionName = "Session_" + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        boolean success = historyService.saveSession(new java.util.ArrayList<>(SharedContext.getInstance().getCapturedImages()), sessionName);
+        
+        if (success) {
+            System.out.println("Images saved successfully as " + sessionName);
+            // Optionally clear the context or show an alert
+            SharedContext.getInstance().getCapturedImages().clear();
+            SharedContext.getInstance().setCurrentlySelectedImage(null);
+            refreshThumbnails();
+            mainImageView.setImage(null);
+        } else {
+            System.err.println("Failed to save images.");
+        }
     }
     
     @Override

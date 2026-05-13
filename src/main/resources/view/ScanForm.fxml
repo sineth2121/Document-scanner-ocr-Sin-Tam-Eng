@@ -107,7 +107,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton blendMode="SCREEN" contentDisplay="TOP" layoutX="86.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Save" textFill="#00eeff">
+            <JFXButton fx:id="saveButton" onAction="#saveImages" blendMode="SCREEN" contentDisplay="TOP" layoutX="86.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" text="Save" textFill="#00eeff">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
