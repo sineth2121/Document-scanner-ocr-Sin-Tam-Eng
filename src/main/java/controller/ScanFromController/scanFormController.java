@@ -1,3 +1,5 @@
+package controller.ScanFromController;
+
 import com.jfoenix.controls.JFXComboBox;
 import javafx.animation.ScaleTransition;
 import javafx.application.Platform;
