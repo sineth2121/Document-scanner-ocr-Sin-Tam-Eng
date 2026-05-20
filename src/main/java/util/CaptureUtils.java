@@ -131,9 +131,10 @@ public class CaptureUtils {
                                         BufferedImage croppedImage = screenFullImage.getSubimage((int)x, (int)y, (int)width, (int)height);
                                         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
                                         String fileName = "snippet_" + timestamp + ".png";
-                                        String desktopPath = System.getProperty("user.home") + "/Desktop/" + fileName;
-                                        
-                                        ImageIO.write(croppedImage, "PNG", new File(desktopPath));
+                                        java.nio.file.Path desktopPath = java.nio.file.Paths.get(
+                                                System.getProperty("user.home"), "Desktop", fileName);
+
+                                        ImageIO.write(croppedImage, "PNG", desktopPath.toFile());
                                         System.out.println("Snippet saved: " + desktopPath);
                                         
                                         if (onCaptured != null) {

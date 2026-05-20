@@ -11,6 +11,8 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class dashboardFormController implements Initializable {
     @FXML private AnchorPane dropPane;
@@ -126,8 +128,18 @@ public class dashboardFormController implements Initializable {
 
     private void navigateToScanForm() {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ScanForm.fxml"));
+            Parent root = loader.load();
+            Object ctrl = loader.getController();
+            if (ctrl != null) {
+                try {
+                    // call public method to ensure controller refreshes UI from SharedContext
+                    ((controller.ScanFromController.scanFormController) ctrl).showFromContext();
+                } catch (ClassCastException ignored) {
+                }
+            }
             javafx.stage.Stage stage = (javafx.stage.Stage) dropPane.getScene().getWindow();
-            stage.setScene(new javafx.scene.Scene(javafx.fxml.FXMLLoader.load(getClass().getResource("/view/ScanForm.fxml"))));
+            stage.setScene(new javafx.scene.Scene(root));
         } catch (Exception e) {
             e.printStackTrace();
         }

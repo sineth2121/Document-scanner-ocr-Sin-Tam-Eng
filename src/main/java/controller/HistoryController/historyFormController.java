@@ -116,11 +116,17 @@ public class historyFormController implements Initializable {
 
         card.getChildren().addAll(imageView, bottomBox);
         
-        // Make the whole card clickable for Edit
+        // Make the whole card clickable for Edit — but NOT when the ⋮ menu button is clicked
         card.setOnMouseClicked(e -> {
-            if (!(e.getTarget() instanceof MenuButton)) {
-                handleEdit(sessionFolder, images);
+            // Walk up the event target's parent chain to detect any MenuButton ancestor
+            javafx.scene.Node target = (javafx.scene.Node) e.getTarget();
+            while (target != null) {
+                if (target instanceof javafx.scene.control.MenuButton) return;
+                // MenuButton's skin labels/arrows also live inside it — getStyleClass() identifies them
+                if (target.getStyleClass().contains("menu-button")) return;
+                target = target.getParent();
             }
+            handleEdit(sessionFolder, images);
         });
 
         return card;
