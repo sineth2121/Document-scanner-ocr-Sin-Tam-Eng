@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #0A0F1C;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HistoryController.historyFormController">
+   <children>
+
+      <!-- Blurred AI background -->
+      <ImageView fitHeight="700.0" fitWidth="1000.0" preserveRatio="false" pickOnBounds="true" opacity="0.45">
+         <image>
+            <Image url="@../images/bg_blur.png" />
+         </image>
+      </ImageView>
+
+      <!-- Header: Title with glow -->
+      <Label layoutX="40.0" layoutY="30.0" text="Scan History" textFill="WHITE">
+         <font>
+            <Font name="Poppins SemiBold" size="30.0" />
+         </font>
+         <effect>
+            <DropShadow color="#6366F1" radius="18.0" spread="0.15" />
+         </effect>
+      </Label>
+
+      <!-- Back Button (Glass) -->
+      <JFXButton fx:id="btnBack" layoutX="880.0" layoutY="35.0" onAction="#handleBack" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color: rgba(30,41,59,0.7); -fx-background-radius: 10; -fx-border-color: rgba(99,102,241,0.5); -fx-border-radius: 10; -fx-cursor: hand;" text="Back" textFill="WHITE">
+         <font>
+            <Font name="Poppins Regular" size="14.0" />
+         </font>
+      </JFXButton>
+
+      <!-- Scrollable history grid -->
+      <ScrollPane fitToWidth="true" layoutX="40.0" layoutY="90.0" prefHeight="570.0" prefWidth="920.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+         <content>
+            <FlowPane fx:id="historyGrid" hgap="20.0" vgap="20.0" prefWidth="900.0" style="-fx-background-color: transparent; -fx-padding: 10;" />
+         </content>
+      </ScrollPane>
+
+   </children>
+</AnchorPane>

@@ -1,0 +1,13 @@
+controller\CameraFOVController\cameraFOVService.class
+controller\DashboardController\dashboardService.class
+controller\testController\testFormController.class
+controller\ScanFromController\scanController.class
+controller\CameraFOVController\cameraFOVFormController$1.class
+controller\testController\testController.class
+controller\ScanFromController\scanService.class
+controller\DashboardController\dashboardController.class
+controller\CameraFOVController\cameraFOVController.class
+Main.class
+controller\CameraFOVController\cameraFOVFormController.class
+Starter.class
+controller\testController\testService.class
