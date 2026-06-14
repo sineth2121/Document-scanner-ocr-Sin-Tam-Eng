@@ -7,14 +7,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import util.CaptureUtils;
+import util.SearchTextUtils;
 import util.SharedContext;
 
 import javafx.scene.input.Dragboard;
@@ -49,8 +52,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -58,6 +66,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.fxmisc.richtext.InlineCssTextArea;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -74,7 +83,24 @@ public class scanFormController implements Initializable, scanService {
     @FXML private Button copyButton;
     @FXML private Button saveButton;
     @FXML private Button exportButton;
-    @FXML private TextArea ocrTextArea;
+    @FXML private Button findReplaceButton;
+    @FXML private Button ttsButton;
+    @FXML private AnchorPane ocrTextContainer;
+    private InlineCssTextArea ocrTextArea;
+
+    // Find & Replace panel components
+    @FXML private VBox findReplacePanel;
+    @FXML private TextField searchField;
+    @FXML private TextField replaceField;
+    @FXML private Button searchButton;
+    @FXML private Button prevMatchButton;
+    @FXML private Button nextMatchButton;
+    @FXML private Button closeFindReplaceButton;
+    @FXML private Button replaceOneButton;
+    @FXML private Button replaceAllButton;
+    @FXML private Label matchCountLabel;
+    @FXML private Label searchInfoLabel;
+    @FXML private FlowPane suggestionsPane;
 
     @FXML private HBox thumbnailBox;
     @FXML private AnchorPane leftImagePane;
@@ -87,15 +113,40 @@ public class scanFormController implements Initializable, scanService {
     // Placeholder constant — used to guard copy/export against the initial hint
     private static final String PLACEHOLDER = "Click Recognize to extract OCR text, or type here...";
 
+    // Find & Replace state
+    private final List<int[]> currentMatches = new ArrayList<>();  // each entry: [startIndex, endIndex]
+    private int currentMatchIndex = -1;
+    private String lastSearchWord = "";
+    private static final double TEXT_AREA_DEFAULT_Y = 54.0;
+    private static final double TEXT_AREA_DEFAULT_HEIGHT = 524.0;
+    /** Inline CSS applied to all OCR text so it is visible on the dark panel. */
+    private static final String BASE_TEXT_STYLE =
+            "-fx-fill: #e8eaf6; -fx-font-family: 'Poppins'; -fx-font-size: 14px;";
+    private static final String MATCH_TEXT_STYLE =
+            BASE_TEXT_STYLE + " -rtfx-background-color: rgba(99,102,241,0.5);";
+    private static final String CURRENT_MATCH_TEXT_STYLE =
+            BASE_TEXT_STYLE + " -rtfx-background-color: rgba(239,68,68,0.7);";
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        languageBox.getItems().setAll("Sinhala", "English", "Tamil");
+        languageBox.getItems().setAll("Sinhala", "English", "Tamil", "Mixed");
         languageBox.getSelectionModel().selectFirst();
         setupButtonHandlers();
         setupAnimations();
 
         mainImageView = new ImageView();
         leftImagePane.getChildren().add(mainImageView);
+
+        ocrTextArea = new InlineCssTextArea();
+        ocrTextArea.getStyleClass().add("ocr-rich-text");
+        ocrTextArea.setWrapText(true);
+        ocrTextArea.setEditable(true);
+        ocrTextArea.setStyle("-fx-background-color: rgba(10,15,28,0.95); -fx-background-insets: 0; -fx-padding: 8;");
+        AnchorPane.setTopAnchor(ocrTextArea, 0.0);
+        AnchorPane.setBottomAnchor(ocrTextArea, 0.0);
+        AnchorPane.setLeftAnchor(ocrTextArea, 0.0);
+        AnchorPane.setRightAnchor(ocrTextArea, 0.0);
+        ocrTextContainer.getChildren().add(ocrTextArea);
 
         refreshThumbnails();
 
@@ -114,14 +165,16 @@ public class scanFormController implements Initializable, scanService {
     // ── Animations ──────────────────────────────────────────────────────────
 
     private void setupAnimations() {
-        addGlowHover(captureButton,   "#6366F1", 18.0, true);
-        addGlowHover(recognizeButton, "#6366F1", 18.0, true);
-        addGlowHover(screenshotButton,"#6366F1", 12.0, false);
-        addGlowHover(addButton,       "#6366F1", 12.0, false);
-        addGlowHover(rotateButton,    "#A855F7", 10.0, false);
-        addGlowHover(deleteButton,    "#FF4757", 10.0, false);
-        addGlowHover(copyButton,      "#22D3EE", 10.0, false);
-        addGlowHover(saveButton,      "#22D3EE", 10.0, false);
+        addGlowHover(captureButton,    "#6366F1", 18.0, true);
+        addGlowHover(recognizeButton,  "#6366F1", 18.0, true);
+        addGlowHover(screenshotButton, "#6366F1", 12.0, false);
+        addGlowHover(addButton,        "#6366F1", 12.0, false);
+        addGlowHover(rotateButton,     "#A855F7", 10.0, false);
+        addGlowHover(deleteButton,     "#FF4757", 10.0, false);
+        addGlowHover(copyButton,       "#22D3EE", 10.0, false);
+        addGlowHover(saveButton,       "#22D3EE", 10.0, false);
+        addGlowHover(findReplaceButton,"#A855F7", 10.0, false);
+        addGlowHover(ttsButton,        "#22D3EE", 10.0, false);
     }
 
     private void addGlowHover(Node node, String glowColor, double radius, boolean primary) {
@@ -183,7 +236,7 @@ public class scanFormController implements Initializable, scanService {
                         showImageText(nextSelected);
                     } else {
                         mainImageView.setImage(null);
-                        ocrTextArea.clear();
+                        clearOcrDisplayText();
                     }
                     refreshThumbnails();
                 });
@@ -306,11 +359,31 @@ public class scanFormController implements Initializable, scanService {
         Platform.runLater(() -> {
             String stored = SharedContext.getInstance().getImageText(img);
             if (stored != null && !stored.isBlank()) {
-                ocrTextArea.setText(stored);
+                setOcrDisplayText(stored);
             } else {
-                ocrTextArea.clear();
+                clearOcrDisplayText();
             }
         });
+    }
+
+    /** Replace OCR panel content and apply visible base styling (required for InlineCssTextArea). */
+    private void setOcrDisplayText(String text) {
+        if (text == null) {
+            text = "";
+        }
+        text = SearchTextUtils.normalizeForSearch(text);
+        ocrTextArea.replaceText(text);
+        applyHighlights();
+        if (!text.isEmpty()) {
+            ocrTextArea.moveTo(0);
+            ocrTextArea.requestFollowCaret();
+        }
+    }
+
+    private void clearOcrDisplayText() {
+        ocrTextArea.clear();
+        currentMatches.clear();
+        currentMatchIndex = -1;
     }
 
     // ── Button wiring ────────────────────────────────────────────────────────
@@ -325,6 +398,20 @@ public class scanFormController implements Initializable, scanService {
         if (copyButton       != null) copyButton.setOnAction(e       -> copyText());
         if (saveButton       != null) saveButton.setOnAction(e       -> saveImages());
         if (exportButton     != null) exportButton.setOnAction(e     -> exportText());
+
+        // Find & Replace handlers
+        if (findReplaceButton      != null) findReplaceButton.setOnAction(e      -> toggleFindReplacePanel());
+        if (ttsButton              != null) ttsButton.setOnAction(e              -> speakText());
+        if (closeFindReplaceButton != null) closeFindReplaceButton.setOnAction(e -> toggleFindReplacePanel());
+        if (searchButton           != null) searchButton.setOnAction(e           -> performSearch());
+        if (prevMatchButton        != null) prevMatchButton.setOnAction(e        -> navigateMatch(-1));
+        if (nextMatchButton        != null) nextMatchButton.setOnAction(e        -> navigateMatch(1));
+        if (replaceOneButton       != null) replaceOneButton.setOnAction(e       -> replaceCurrentMatch());
+        if (replaceAllButton       != null) replaceAllButton.setOnAction(e       -> replaceAllMatches());
+        // Allow pressing Enter in the search field to trigger search
+        if (searchField            != null) searchField.setOnAction(e            -> performSearch());
+        // Allow pressing Enter in the replace field to replace current
+        if (replaceField           != null) replaceField.setOnAction(e           -> replaceCurrentMatch());
     }
 
     // ── Capture actions ──────────────────────────────────────────────────────
@@ -343,7 +430,7 @@ public class scanFormController implements Initializable, scanService {
             SharedContext.getInstance().addImage(img);
             refreshThumbnails();
             displayMainImage(img);
-            ocrTextArea.clear();   // fresh image → clear right panel
+            clearOcrDisplayText();   // fresh image → clear right panel
         }
     }
 
@@ -475,7 +562,7 @@ public class scanFormController implements Initializable, scanService {
             showImageText(nextSelected);
         } else {
             mainImageView.setImage(null);
-            ocrTextArea.clear();
+            clearOcrDisplayText();
         }
         refreshThumbnails();
     }
@@ -503,8 +590,10 @@ public class scanFormController implements Initializable, scanService {
         final String lang     = selectedLanguage;
         final String langCode = mapLanguageCode(selectedLanguage);
 
-        ocrTextArea.setText("Recognizing (" + lang + ") … please wait.");
+        setOcrDisplayText("Recognizing (" + lang + ") … please wait.");
         recognizeButton.setDisable(true);
+
+        final int selectedIndex = SharedContext.getInstance().getCapturedImages().indexOf(selected);
 
         new Thread(() -> {
             try {
@@ -515,15 +604,16 @@ public class scanFormController implements Initializable, scanService {
                 SharedContext.getInstance().setImageText(selected, text);
 
                 Platform.runLater(() -> {
-                    // Only update UI if this image is still selected
-                    if (SharedContext.getInstance().getCurrentlySelectedImage() == selected) {
-                        ocrTextArea.setText(text);
+                    Image current = SharedContext.getInstance().getCurrentlySelectedImage();
+                    int currentIndex = SharedContext.getInstance().getCapturedImages().indexOf(current);
+                    if (currentIndex == selectedIndex && selectedIndex >= 0) {
+                        setOcrDisplayText(text);
                     }
                     recognizeButton.setDisable(false);
                 });
             } catch (Exception ex) {
                 Platform.runLater(() -> {
-                    ocrTextArea.clear();
+                    clearOcrDisplayText();
                     recognizeButton.setDisable(false);
                     showAlert(Alert.AlertType.ERROR, "OCR Error",
                         "Unable to perform OCR: " + ex.getMessage()
@@ -546,6 +636,421 @@ public class scanFormController implements Initializable, scanService {
         cc.putString(text);
         Clipboard.getSystemClipboard().setContent(cc);
         showAlert(Alert.AlertType.INFORMATION, "Copied", "OCR text copied to clipboard.");
+    }
+
+    // ── Text to Speech ───────────────────────────────────────────────────────
+
+    @FXML
+    private void speakText() {
+        String text = ocrTextArea.getText();
+        if (text == null || text.isBlank() || text.equals(PLACEHOLDER)) {
+            showAlert(Alert.AlertType.WARNING, "No OCR Text", "Run Recognize first or type some text to speak.");
+            return;
+        }
+
+        String selectedLanguage = languageBox.getSelectionModel().getSelectedItem();
+        if (selectedLanguage == null || selectedLanguage.isBlank()) {
+            selectedLanguage = "english";
+        }
+
+        final String finalLanguage = selectedLanguage;
+        ttsButton.setDisable(true);
+
+        new Thread(() -> {
+            try {
+                String escapedText = escapeJson(text);
+                String jsonPayload = "{\"text\":" + escapedText + ",\"language\":\"" + finalLanguage + "\"}";
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(URI.create("http://127.0.0.1:5000/api/tts"))
+                        .header("Content-Type", "application/json; charset=utf-8")
+                        .POST(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
+                        .build();
+
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+                Platform.runLater(() -> {
+                    ttsButton.setDisable(false);
+                    if (response.statusCode() != 200) {
+                        showAlert(Alert.AlertType.ERROR, "TTS Error", "Backend returned error: " + response.body());
+                    }
+                });
+            } catch (Exception ex) {
+                Platform.runLater(() -> {
+                    ttsButton.setDisable(false);
+                    showAlert(Alert.AlertType.ERROR, "TTS Error", "Failed to connect to backend: " + ex.getMessage());
+                });
+            }
+        }).start();
+    }
+
+    private static String escapeJson(String string) {
+        if (string == null || string.isEmpty()) {
+            return "\"\"";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append('"');
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            switch (c) {
+                case '\\':
+                case '"':
+                    sb.append('\\').append(c);
+                    break;
+                case '\b':
+                    sb.append("\\b");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\f':
+                    sb.append("\\f");
+                    break;
+                case '\r':
+                    sb.append("\\r");
+                    break;
+                default:
+                    if (c < ' ') {
+                        String t = "000" + Integer.toHexString(c);
+                        sb.append("\\u").append(t.substring(t.length() - 4));
+                    } else {
+                        sb.append(c);
+                    }
+            }
+        }
+        sb.append('"');
+        return sb.toString();
+    }
+
+    // ── Find & Replace ──────────────────────────────────────────────────────
+
+    /**
+     * Toggle the Find & Replace panel visibility.
+     * When shown, shifts the TextArea down to make room; when hidden, restores it.
+     */
+    private void toggleFindReplacePanel() {
+        if (findReplacePanel == null) return;
+
+        boolean show = !findReplacePanel.isVisible();
+        findReplacePanel.setVisible(show);
+        findReplacePanel.setManaged(show);
+
+        Platform.runLater(() -> {
+            if (show) {
+                // Measure the panel height after layout, then shift TextArea down
+                findReplacePanel.applyCss();
+                findReplacePanel.layout();
+                double panelHeight = findReplacePanel.getBoundsInLocal().getHeight();
+                double newY = TEXT_AREA_DEFAULT_Y + panelHeight + 8;
+                double newHeight = TEXT_AREA_DEFAULT_HEIGHT - panelHeight - 8;
+                ocrTextContainer.setLayoutY(newY);
+                ocrTextContainer.setPrefHeight(Math.max(newHeight, 150));
+                searchField.requestFocus();
+            } else {
+                // Restore TextArea to original position
+                ocrTextContainer.setLayoutY(TEXT_AREA_DEFAULT_Y);
+                ocrTextContainer.setPrefHeight(TEXT_AREA_DEFAULT_HEIGHT);
+                clearSearchState();
+            }
+        });
+    }
+
+    /**
+     * Perform a whole-word, case-insensitive search in the OCR text.
+     * Uses Unicode word boundaries so Sinhala, Tamil, and English behave the same way.
+     * If no matches found, show fuzzy close-match suggestions.
+     */
+    private void performSearch() {
+        String word = searchField.getText();
+        if (word == null || word.isBlank()) return;
+
+        word = SearchTextUtils.normalizeForSearch(word.trim());
+        lastSearchWord = word;
+        String text = ocrTextArea.getText();
+        if (text == null || text.isBlank()) {
+            searchInfoLabel.setText("No text to search.");
+            clearSearchState();
+            return;
+        }
+
+        int totalWords = SearchTextUtils.countWordTokens(text);
+
+        currentMatches.clear();
+        try {
+            currentMatches.addAll(SearchTextUtils.findWholeWordMatches(text, word));
+        } catch (Exception e) {
+            searchInfoLabel.setText("Invalid search term.");
+            return;
+        }
+
+        // Hide suggestions pane initially
+        suggestionsPane.setVisible(false);
+        suggestionsPane.setManaged(false);
+        suggestionsPane.getChildren().clear();
+
+        if (currentMatches.isEmpty()) {
+            currentMatchIndex = -1;
+            matchCountLabel.setText("0 / 0");
+            searchInfoLabel.setText("'" + word + "' not found.  Total words: " + totalWords);
+
+            // Show fuzzy close-match suggestions
+            List<String> suggestions = findCloseMatches(word, text, 5, 0.6);
+            if (!suggestions.isEmpty()) {
+                searchInfoLabel.setText("'" + word + "' not found.  Total words: " + totalWords
+                        + "\nDid you mean one of these?");
+                for (String suggestion : suggestions) {
+                    Button chip = new Button(suggestion);
+                    chip.setStyle("-fx-background-color: rgba(99,102,241,0.3); "
+                            + "-fx-text-fill: #A5B4FC; -fx-background-radius: 12; "
+                            + "-fx-border-color: rgba(99,102,241,0.5); -fx-border-radius: 12; "
+                            + "-fx-cursor: hand; -fx-font-family: 'Poppins'; -fx-font-size: 12px; "
+                            + "-fx-padding: 4 12 4 12;");
+                    chip.setOnMouseEntered(e -> chip.setStyle("-fx-background-color: #6366F1; "
+                            + "-fx-text-fill: white; -fx-background-radius: 12; "
+                            + "-fx-border-color: #6366F1; -fx-border-radius: 12; "
+                            + "-fx-cursor: hand; -fx-font-family: 'Poppins'; -fx-font-size: 12px; "
+                            + "-fx-padding: 4 12 4 12;"));
+                    chip.setOnMouseExited(e -> chip.setStyle("-fx-background-color: rgba(99,102,241,0.3); "
+                            + "-fx-text-fill: #A5B4FC; -fx-background-radius: 12; "
+                            + "-fx-border-color: rgba(99,102,241,0.5); -fx-border-radius: 12; "
+                            + "-fx-cursor: hand; -fx-font-family: 'Poppins'; -fx-font-size: 12px; "
+                            + "-fx-padding: 4 12 4 12;"));
+                    chip.setOnAction(e -> {
+                        searchField.setText(suggestion);
+                        performSearch();
+                    });
+                    suggestionsPane.getChildren().add(chip);
+                }
+                suggestionsPane.setVisible(true);
+                suggestionsPane.setManaged(true);
+
+                // Re-measure panel height after suggestions added
+                Platform.runLater(() -> {
+                    findReplacePanel.applyCss();
+                    findReplacePanel.layout();
+                    double panelHeight = findReplacePanel.getBoundsInLocal().getHeight();
+                    double newY = TEXT_AREA_DEFAULT_Y + panelHeight + 8;
+                    double newHeight = TEXT_AREA_DEFAULT_HEIGHT - panelHeight - 8;
+                    ocrTextContainer.setLayoutY(newY);
+                    ocrTextContainer.setPrefHeight(Math.max(newHeight, 150));
+                });
+            }
+        } else {
+            currentMatchIndex = 0;
+            updateMatchCountLabel();
+
+            // Build per-occurrence detail lines
+            StringBuilder info = new StringBuilder();
+            info.append("Total words: ").append(totalWords)
+                    .append("  |  Occurrences of '").append(word).append("': ")
+                    .append(currentMatches.size());
+            searchInfoLabel.setText(info.toString());
+
+            highlightCurrentMatch();
+        }
+    }
+
+    /**
+     * Navigate between matches: direction = -1 (prev) or +1 (next).
+     */
+    private void navigateMatch(int direction) {
+        if (currentMatches.isEmpty()) return;
+        currentMatchIndex += direction;
+        if (currentMatchIndex < 0) currentMatchIndex = currentMatches.size() - 1;
+        if (currentMatchIndex >= currentMatches.size()) currentMatchIndex = 0;
+        updateMatchCountLabel();
+        highlightCurrentMatch();
+    }
+
+    /**
+     * Replace only the currently highlighted occurrence.
+     */
+    private void replaceCurrentMatch() {
+        if (currentMatches.isEmpty() || currentMatchIndex < 0) {
+            showAlert(Alert.AlertType.WARNING, "No Match Selected",
+                    "Search for a word first, then navigate to the occurrence you want to replace.");
+            return;
+        }
+        String replacement = replaceField.getText();
+        if (replacement == null) replacement = "";
+
+        int[] match = currentMatches.get(currentMatchIndex);
+        String text = ocrTextArea.getText();
+
+        if (!SearchTextUtils.regionMatchesSearchTerm(text, match[0], match[1], lastSearchWord)) {
+            showAlert(Alert.AlertType.WARNING, "Text Modified", "The text was manually modified. Please search again.");
+            performSearch();
+            return;
+        }
+
+        String normalizedReplacement = SearchTextUtils.normalizeForSearch(replacement);
+        String updated = text.substring(0, match[0]) + normalizedReplacement + text.substring(match[1]);
+        setOcrDisplayText(updated);
+
+        // Update stored text for the current image
+        Image selected = SharedContext.getInstance().getCurrentlySelectedImage();
+        if (selected != null) {
+            SharedContext.getInstance().setImageText(selected, updated);
+        }
+
+        int targetIndex = currentMatchIndex;
+
+        // Re-run search to refresh match positions
+        performSearch();
+        
+        // Restore match index if possible
+        if (!currentMatches.isEmpty()) {
+            currentMatchIndex = Math.min(targetIndex, currentMatches.size() - 1);
+            updateMatchCountLabel();
+            highlightCurrentMatch();
+        }
+    }
+
+    /**
+     * Replace ALL occurrences of the current search word.
+     */
+    private void replaceAllMatches() {
+        if (currentMatches.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "No Matches",
+                    "Search for a word first before replacing.");
+            return;
+        }
+        String replacement = replaceField.getText();
+        if (replacement == null) replacement = "";
+
+        String text = ocrTextArea.getText();
+        int count = currentMatches.size();
+
+        String normalizedReplacement = SearchTextUtils.normalizeForSearch(replacement);
+
+        for (int[] match : currentMatches) {
+            if (!SearchTextUtils.regionMatchesSearchTerm(text, match[0], match[1], lastSearchWord)) {
+                showAlert(Alert.AlertType.WARNING, "Text Modified", "The text was manually modified. Please search again.");
+                performSearch();
+                return;
+            }
+        }
+
+        for (int i = currentMatches.size() - 1; i >= 0; i--) {
+            int[] match = currentMatches.get(i);
+            text = text.substring(0, match[0]) + normalizedReplacement + text.substring(match[1]);
+        }
+
+        setOcrDisplayText(text);
+
+        // Update stored text for the current image
+        Image selected = SharedContext.getInstance().getCurrentlySelectedImage();
+        if (selected != null) {
+            SharedContext.getInstance().setImageText(selected, text);
+        }
+
+        searchInfoLabel.setText("Replaced all " + count + " occurrences with '" + replacement + "'.");
+        clearSearchState();
+    }
+
+    private void updateMatchCountLabel() {
+        if (currentMatches.isEmpty()) {
+            matchCountLabel.setText("0 / 0");
+        } else {
+            matchCountLabel.setText((currentMatchIndex + 1) + " / " + currentMatches.size());
+        }
+    }
+
+    private void clearSearchState() {
+        currentMatches.clear();
+        currentMatchIndex = -1;
+        matchCountLabel.setText("0 / 0");
+    }
+
+    /**
+     * Select and scroll to the current match in the TextArea.
+     */
+    private void highlightCurrentMatch() {
+        if (currentMatches.isEmpty() || currentMatchIndex < 0) return;
+        int[] match = currentMatches.get(currentMatchIndex);
+        Platform.runLater(() -> {
+            ocrTextArea.requestFocus();
+            ocrTextArea.moveTo(match[0]);
+            ocrTextArea.requestFollowCaret();
+            applyHighlights();
+        });
+    }
+
+    private void applyHighlights() {
+        int len = ocrTextArea.getLength();
+        if (len == 0) return;
+        ocrTextArea.setStyle(0, len, BASE_TEXT_STYLE);
+        for (int i = 0; i < currentMatches.size(); i++) {
+            int[] match = currentMatches.get(i);
+            if (match[0] < 0 || match[1] > len || match[0] >= match[1]) continue;
+            if (i == currentMatchIndex) {
+                ocrTextArea.setStyle(match[0], match[1], CURRENT_MATCH_TEXT_STYLE);
+            } else {
+                ocrTextArea.setStyle(match[0], match[1], MATCH_TEXT_STYLE);
+            }
+        }
+    }
+
+    /**
+     * Find close matches for a word in the document text using Levenshtein distance.
+     * Replicates Python's difflib.get_close_matches() behavior.
+     *
+     * @param word    the search term
+     * @param text    the full document text
+     * @param n       max number of suggestions to return
+     * @param cutoff  minimum similarity ratio (0.0 to 1.0)
+     * @return list of close-match words sorted by similarity (best first)
+     */
+    private List<String> findCloseMatches(String word, String text, int n, double cutoff) {
+        word = SearchTextUtils.normalizeForSearch(word);
+        text = SearchTextUtils.normalizeForSearch(text);
+        Set<String> uniqueWords = new HashSet<>(SearchTextUtils.uniqueWordTokens(text));
+
+        List<String[]> scored = new ArrayList<>();
+
+        for (String candidate : uniqueWords) {
+            if (candidate.equalsIgnoreCase(word)) {
+                continue;
+            }
+
+            int dist = levenshteinDistance(word, candidate);
+            int maxLen = Math.max(word.length(), candidate.length());
+            double similarity = maxLen == 0 ? 1.0 : 1.0 - ((double) dist / maxLen);
+
+            if (similarity >= cutoff) {
+                scored.add(new String[]{candidate, String.valueOf(similarity)});
+            }
+        }
+
+        // Sort by similarity descending
+        scored.sort((a, b) -> Double.compare(Double.parseDouble(b[1]), Double.parseDouble(a[1])));
+
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < Math.min(n, scored.size()); i++) {
+            result.add(scored.get(i)[0]);
+        }
+        return result;
+    }
+
+    /**
+     * Compute the Levenshtein (edit) distance between two strings.
+     */
+    private static int levenshteinDistance(String a, String b) {
+        int lenA = a.length(), lenB = b.length();
+        int[][] dp = new int[lenA + 1][lenB + 1];
+        for (int i = 0; i <= lenA; i++) dp[i][0] = i;
+        for (int j = 0; j <= lenB; j++) dp[0][j] = j;
+        for (int i = 1; i <= lenA; i++) {
+            for (int j = 1; j <= lenB; j++) {
+                int cost = (a.charAt(i - 1) == b.charAt(j - 1)) ? 0 : 1;
+                dp[i][j] = Math.min(Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1),
+                        dp[i - 1][j - 1] + cost);
+            }
+        }
+        return dp[lenA][lenB];
     }
 
     // ── Export ───────────────────────────────────────────────────────────────
@@ -616,7 +1121,7 @@ public class scanFormController implements Initializable, scanService {
             SharedContext.getInstance().clearAllText();
             refreshThumbnails();
             mainImageView.setImage(null);
-            ocrTextArea.clear();
+            clearOcrDisplayText();
             showAlert(Alert.AlertType.INFORMATION, "Saved",
                 "Session saved as: " + sessionName);
         } else {
@@ -662,7 +1167,15 @@ public class scanFormController implements Initializable, scanService {
     }
 
     private byte[] imageToPngBytes(Image image) throws IOException {
+        int w = (int) image.getWidth();
+        int h = (int) image.getHeight();
+        if (w <= 0 || h <= 0) {
+            throw new IOException("Image is still loading; try again in a moment.");
+        }
         BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
+        if (bi == null) {
+            throw new IOException("Could not read image pixels for OCR.");
+        }
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ImageIO.write(bi, "png", os);
             return os.toByteArray();
@@ -673,6 +1186,7 @@ public class scanFormController implements Initializable, scanService {
         return switch (selectedLanguage.toLowerCase()) {
             case "sinhala" -> "sin";
             case "tamil"   -> "tam";
+            case "mixed"   -> "eng+sin+tam";
             default        -> "eng";
         };
     }
