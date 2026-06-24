@@ -34,5 +34,23 @@ build/
 ### VS Code ###
 .vscode/
 
+### Python ###
+__pycache__/
+*.pyc
+*.pyo
+
+### Portable Tesseract (binaries, not sources) ###
+Backend/Teseract_Ocr_Data/
+
+### Maven distribution downloads ###
+.mvn/apache-maven/
+Backend/maven/
+
+### Test data ###
+Backend/testdata/
+
 ### Mac OS ###
 .DS_Store
+
+### Windows ###
+Thumbs.db

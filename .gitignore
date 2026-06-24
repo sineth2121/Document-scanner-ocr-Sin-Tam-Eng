@@ -1,0 +1,6 @@
+# Root-level project artifacts (outside subfolder)
+page_lift_arduino_code/
+start-app.bat
+technical_document.txt
+view_feed.py
+*.log

@@ -18,6 +18,8 @@ public class Starter extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        stage.setMinWidth(1200);
+        stage.setMinHeight(780);
         stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/Dashboard.fxml"))));
         stage.show();
     }

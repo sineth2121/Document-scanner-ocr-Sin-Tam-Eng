@@ -46,3 +46,74 @@
     -fx-shape: " ";
     -fx-padding: 0;
 }
+
+/* Find & Replace panel text fields */
+.text-field {
+    -fx-text-fill: white;
+    -fx-highlight-fill: #6366F1;
+    -fx-highlight-text-fill: white;
+}
+
+/* TextArea selection highlight for search matches */
+.text-area .content {
+    -fx-highlight-fill: rgba(99, 102, 241, 0.55);
+    -fx-highlight-text-fill: #FFFFFF;
+}
+
+/* RichTextFX OCR output panel */
+.ocr-rich-text {
+    -fx-background-color: rgba(10, 15, 28, 0.95);
+    -fx-background-insets: 0;
+    -fx-padding: 8;
+}
+.ocr-rich-text .scroll-bar:vertical,
+.ocr-rich-text .scroll-bar:horizontal {
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+/* Ensure all default texts are white */
+.label {
+    -fx-text-fill: white;
+}
+.button {
+    -fx-text-fill: white;
+}
+
+/* Fix ComboBox popup black text and background */
+.combo-box-popup .list-view {
+    -fx-background-color: #0A0F1C;
+    -fx-border-color: rgba(99,102,241,0.5);
+    -fx-border-width: 1px;
+}
+
+/* Ensure the selected value in the combobox display area is white */
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+.jfx-combo-box {
+    -fx-prompt-text-fill: white;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+.combo-box-popup .list-cell:filled:hover, 
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: #6366F1;
+    -fx-text-fill: white;
+}
+
+/* Fix ContextMenu / MenuButton black text & background */
+.context-menu {
+    -fx-background-color: #0A0F1C;
+    -fx-border-color: rgba(99,102,241,0.5);
+    -fx-border-width: 1px;
+}
+.menu-item .label {
+    -fx-text-fill: white;
+}
+.menu-item:hover, .menu-item:focused {
+    -fx-background-color: #6366F1;
+}

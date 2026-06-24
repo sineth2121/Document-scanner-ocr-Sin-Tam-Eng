@@ -4,56 +4,67 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.SVGPath?>
 
-<AnchorPane prefHeight="851.0" prefWidth="1443.0" stylesheets="@../css/style.css" style="-fx-background-color: #0A0F1C;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScanFromController.scanFormController">
+<AnchorPane minHeight="780" minWidth="1200" stylesheets="@../css/style.css" style="-fx-background-color: #0A0F1C;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScanFromController.scanFormController">
    <children>
 
       <!-- Blurred AI background -->
-      <ImageView fitHeight="851.0" fitWidth="1443.0" preserveRatio="false" pickOnBounds="true" opacity="0.45">
+      <ImageView AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" preserveRatio="false" pickOnBounds="true" opacity="0.45">
          <image>
             <Image url="@../images/bg_blur.png" />
          </image>
       </ImageView>
 
       <!-- Glassmorphism sidebar -->
-      <AnchorPane prefHeight="851.0" prefWidth="99.0" style="-fx-background-color: rgba(10,15,28,0.82); -fx-border-color: rgba(99,102,241,0.35); -fx-border-width: 0 1 0 0;">
+      <AnchorPane AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" prefWidth="99.0" style="-fx-background-color: rgba(10,15,28,0.82); -fx-border-color: rgba(99,102,241,0.35); -fx-border-width: 0 1 0 0;">
          <children>
             <ImageView fitHeight="59.0" fitWidth="60.0" layoutX="20.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/logo.png" />
                </image>
             </ImageView>
+            <SVGPath fx:id="phoneStatusIcon" content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#22c55e" scaleX="0.5" scaleY="0.5" layoutX="35.0" layoutY="95.0" visible="false" />
+            <JFXButton fx:id="receiveButton" layoutX="14.5" layoutY="120.0" prefWidth="70.0" prefHeight="26.0" text="Receive" style="-fx-background-color: #22c55e; -fx-background-radius: 6; -fx-cursor: hand;" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Poppins Regular" size="10.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
 
       <!-- Top action buttons -->
-      <JFXButton fx:id="captureButton" contentDisplay="TOP" layoutX="118.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: #6366F1; -fx-background-radius: 14; -fx-cursor: hand;" text="Capture" textFill="WHITE">
+      <JFXButton fx:id="captureButton" contentDisplay="TOP" layoutX="118.0" layoutY="23.0" prefHeight="62.0" prefWidth="62.0" style="-fx-background-color: #6366F1; -fx-background-radius: 14; -fx-cursor: hand;" text="Capture" textFill="WHITE">
          <font>
-            <Font name="Poppins Regular" size="12.0" />
+            <Font name="Poppins Regular" size="11.0" />
          </font>
          <graphic>
-            <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/Camera_208px.png" />
                </image>
             </ImageView>
          </graphic>
          <effect>
-            <DropShadow color="#6366F1" radius="16.0" spread="0.15" />
+            <DropShadow color="#6366F1" radius="12.0" spread="0.15" />
          </effect>
       </JFXButton>
 
-      <JFXButton fx:id="screenshotButton" contentDisplay="TOP" layoutX="204.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: rgba(30,41,59,0.7); -fx-border-color: rgba(99,102,241,0.4); -fx-border-radius: 14; -fx-background-radius: 14; -fx-cursor: hand;" text="Screen Shots" textFill="WHITE">
+      <JFXButton fx:id="screenshotButton" contentDisplay="TOP" layoutX="186.0" layoutY="23.0" prefHeight="62.0" prefWidth="62.0" style="-fx-background-color: rgba(30,41,59,0.7); -fx-border-color: rgba(99,102,241,0.4); -fx-border-radius: 14; -fx-background-radius: 14; -fx-cursor: hand;" text="Screen Shots" textFill="WHITE">
          <font>
-            <Font name="Poppins Regular" size="12.0" />
+            <Font name="Poppins Regular" size="11.0" />
          </font>
          <graphic>
-            <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/screenshot_480px.png" />
                </image>
@@ -61,12 +72,12 @@
          </graphic>
       </JFXButton>
 
-      <JFXButton fx:id="addButton" contentDisplay="TOP" layoutX="289.0" layoutY="23.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: rgba(30,41,59,0.7); -fx-border-color: rgba(99,102,241,0.4); -fx-border-radius: 14; -fx-background-radius: 14; -fx-cursor: hand;" text="Add" textFill="WHITE">
+      <JFXButton fx:id="addButton" contentDisplay="TOP" layoutX="254.0" layoutY="23.0" prefHeight="62.0" prefWidth="62.0" style="-fx-background-color: rgba(30,41,59,0.7); -fx-border-color: rgba(99,102,241,0.4); -fx-border-radius: 14; -fx-background-radius: 14; -fx-cursor: hand;" text="Add" textFill="WHITE">
          <font>
-            <Font name="Poppins Regular" size="12.0" />
+            <Font name="Poppins Regular" size="11.0" />
          </font>
          <graphic>
-            <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/add_layer_512px.png" />
                </image>
@@ -75,20 +86,23 @@
       </JFXButton>
 
       <!-- Thumbnail scroll pane -->
-      <javafx.scene.control.ScrollPane layoutX="400.0" layoutY="23.0" prefHeight="95.0" prefWidth="750.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToHeight="true" fitToWidth="false">
+      <javafx.scene.control.ScrollPane AnchorPane.topAnchor="23.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="290.0" prefHeight="95.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER" hbarPolicy="AS_NEEDED" fitToHeight="true" fitToWidth="false">
          <content>
             <javafx.scene.layout.HBox fx:id="thumbnailBox" alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: transparent;" />
          </content>
       </javafx.scene.control.ScrollPane>
 
+      <!-- Main content: Left + Right panels -->
+      <HBox spacing="26.0" AnchorPane.topAnchor="128.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="14.0">
+      
       <!-- Left Glass Panel (Image viewer) -->
-      <AnchorPane layoutX="110.0" layoutY="128.0" prefHeight="710.0" prefWidth="693.0" style="-fx-background-color: rgba(15,23,42,0.72); -fx-background-radius: 24; -fx-border-color: rgba(99,102,241,0.35); -fx-border-radius: 24; -fx-border-width: 1;">
+      <AnchorPane HBox.hgrow="ALWAYS" minWidth="280" prefWidth="400" style="-fx-background-color: rgba(15,23,42,0.72); -fx-background-radius: 24; -fx-border-color: rgba(99,102,241,0.35); -fx-border-radius: 24; -fx-border-width: 1;">
          <effect>
             <DropShadow color="rgba(99,102,241,0.25)" radius="40.0" spread="0.02" />
          </effect>
          <children>
-            <AnchorPane fx:id="leftImagePane" prefHeight="609.0" prefWidth="712.0" style="-fx-background-color: transparent; -fx-background-radius: 24;" />
-            <JFXButton fx:id="rotateButton" contentDisplay="TOP" layoutX="10.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Rotate" textFill="rgba(200,200,255,0.9)">
+            <AnchorPane fx:id="leftImagePane" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="103.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" style="-fx-background-color: transparent; -fx-background-radius: 24;" />
+            <JFXButton fx:id="rotateButton" contentDisplay="TOP" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="10.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Rotate" textFill="rgba(200,200,255,0.9)">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
@@ -100,7 +114,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="deleteButton" contentDisplay="TOP" layoutX="90.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Delete" textFill="#FF4757">
+            <JFXButton fx:id="deleteButton" contentDisplay="TOP" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="90.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Delete" textFill="#FF4757">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
@@ -112,7 +126,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="recognizeButton" layoutX="514.0" layoutY="628.0" prefHeight="68.0" prefWidth="181.0" style="-fx-background-color: #6366F1; -fx-background-radius: 16; -fx-cursor: hand;" text="    Recognize" textFill="WHITE">
+            <JFXButton fx:id="recognizeButton" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" prefHeight="68.0" prefWidth="181.0" style="-fx-background-color: #6366F1; -fx-background-radius: 16; -fx-cursor: hand;" text="    Recognize" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="16.0" />
                </font>
@@ -131,19 +145,60 @@
       </AnchorPane>
 
       <!-- Right Glass Panel (OCR output) -->
-      <AnchorPane layoutX="829.0" layoutY="126.0" prefHeight="710.0" prefWidth="603.0" style="-fx-background-color: rgba(15,23,42,0.72); -fx-background-radius: 24; -fx-border-color: rgba(99,102,241,0.35); -fx-border-radius: 24; -fx-border-width: 1;">
+      <AnchorPane HBox.hgrow="ALWAYS" minWidth="350" prefWidth="603" style="-fx-background-color: rgba(15,23,42,0.72); -fx-background-radius: 24; -fx-border-color: rgba(99,102,241,0.35); -fx-border-radius: 24; -fx-border-width: 1;">
          <effect>
             <DropShadow color="rgba(99,102,241,0.25)" radius="40.0" spread="0.02" />
          </effect>
          <children>
-            <AnchorPane prefHeight="609.0" prefWidth="603.0" style="-fx-background-color: transparent; -fx-background-radius: 24;" />
+            <AnchorPane AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" style="-fx-background-color: transparent; -fx-background-radius: 24;" />
             <Label layoutX="30.0" layoutY="18.0" text="OCR Output" textFill="rgba(200,200,255,0.9)">
                <font>
                   <Font name="Poppins Regular" size="16.0" />
                </font>
             </Label>
-            <TextArea fx:id="ocrTextArea" layoutX="22.0" layoutY="54.0" prefHeight="524.0" prefWidth="559.0" style="-fx-control-inner-background: rgba(10,15,28,0.95); -fx-text-fill: white; -fx-font-family: 'Poppins'; -fx-font-size: 14px;" wrapText="true" editable="true" promptText="Click Recognize to extract OCR text, or type here..." />
-            <JFXButton fx:id="copyButton" contentDisplay="TOP" layoutX="6.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Copy" textFill="rgba(200,200,255,0.9)">
+
+            <!-- Find & Replace Panel (hidden by default, toggled via button) -->
+            <VBox fx:id="findReplacePanel" AnchorPane.topAnchor="48.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" spacing="6.0" visible="false" managed="false" style="-fx-background-color: rgba(20,28,50,0.95); -fx-background-radius: 12; -fx-border-color: rgba(99,102,241,0.45); -fx-border-radius: 12; -fx-border-width: 1; -fx-padding: 10;">
+               <!-- Row 1: Search field + buttons -->
+               <HBox spacing="6.0" alignment="CENTER_LEFT">
+                  <TextField fx:id="searchField" prefHeight="32.0" prefWidth="240.0" promptText="Search word..." style="-fx-background-color: rgba(10,15,28,0.9); -fx-text-fill: white; -fx-prompt-text-fill: rgba(200,200,255,0.4); -fx-font-family: 'Poppins'; -fx-font-size: 13px; -fx-background-radius: 8; -fx-border-color: rgba(99,102,241,0.3); -fx-border-radius: 8;" />
+                  <JFXButton fx:id="searchButton" text="Search" prefHeight="32.0" prefWidth="70.0" style="-fx-background-color: #6366F1; -fx-background-radius: 8; -fx-cursor: hand;" textFill="WHITE">
+                     <font><Font name="Poppins Regular" size="12.0" /></font>
+                  </JFXButton>
+                  <!-- Occurrence navigator -->
+                  <JFXButton fx:id="prevMatchButton" text="◀" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: rgba(30,41,59,0.8); -fx-background-radius: 8; -fx-cursor: hand;" textFill="rgba(200,200,255,0.9)">
+                     <font><Font name="Poppins Regular" size="13.0" /></font>
+                  </JFXButton>
+                  <Label fx:id="matchCountLabel" text="0 / 0" textFill="rgba(200,200,255,0.8)">
+                     <font><Font name="Poppins Regular" size="12.0" /></font>
+                  </Label>
+                  <JFXButton fx:id="nextMatchButton" text="▶" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: rgba(30,41,59,0.8); -fx-background-radius: 8; -fx-cursor: hand;" textFill="rgba(200,200,255,0.9)">
+                     <font><Font name="Poppins Regular" size="13.0" /></font>
+                  </JFXButton>
+                  <JFXButton fx:id="closeFindReplaceButton" text="✕" prefHeight="28.0" prefWidth="28.0" style="-fx-background-color: transparent; -fx-cursor: hand;" textFill="#FF4757">
+                     <font><Font name="Poppins Regular" size="14.0" /></font>
+                  </JFXButton>
+               </HBox>
+               <!-- Row 2: Replace field + buttons -->
+               <HBox spacing="6.0" alignment="CENTER_LEFT">
+                  <TextField fx:id="replaceField" prefHeight="32.0" prefWidth="240.0" promptText="Replace with..." style="-fx-background-color: rgba(10,15,28,0.9); -fx-text-fill: white; -fx-prompt-text-fill: rgba(200,200,255,0.4); -fx-font-family: 'Poppins'; -fx-font-size: 13px; -fx-background-radius: 8; -fx-border-color: rgba(99,102,241,0.3); -fx-border-radius: 8;" />
+                  <JFXButton fx:id="replaceOneButton" text="Replace" prefHeight="32.0" prefWidth="75.0" style="-fx-background-color: rgba(30,41,59,0.8); -fx-border-color: #22D3EE; -fx-border-radius: 8; -fx-background-radius: 8; -fx-cursor: hand;" textFill="#22D3EE">
+                     <font><Font name="Poppins Regular" size="12.0" /></font>
+                  </JFXButton>
+                  <JFXButton fx:id="replaceAllButton" text="Replace All" prefHeight="32.0" prefWidth="95.0" style="-fx-background-color: #22D3EE; -fx-background-radius: 8; -fx-cursor: hand;" textFill="#0A0F1C">
+                     <font><Font name="Poppins Regular" size="12.0" /></font>
+                  </JFXButton>
+               </HBox>
+               <!-- Row 3: Info label (total words / occurrences) -->
+               <Label fx:id="searchInfoLabel" text="" textFill="rgba(200,200,255,0.6)" wrapText="true">
+                  <font><Font name="Poppins Regular" size="11.0" /></font>
+               </Label>
+               <!-- Row 4: Close match suggestions (shown when word not found) -->
+               <FlowPane fx:id="suggestionsPane" hgap="6.0" vgap="6.0" visible="false" managed="false" />
+            </VBox>
+
+            <AnchorPane fx:id="ocrTextContainer" AnchorPane.topAnchor="54.0" AnchorPane.bottomAnchor="103.0" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="22.0" />
+            <JFXButton fx:id="copyButton" contentDisplay="TOP" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="6.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Copy" textFill="rgba(200,200,255,0.9)">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
@@ -155,7 +210,7 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="saveButton" onAction="#saveImages" contentDisplay="TOP" layoutX="86.0" layoutY="615.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Save" textFill="#22D3EE">
+            <JFXButton fx:id="saveButton" onAction="#saveImages" contentDisplay="TOP" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="86.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Save" textFill="#22D3EE">
                <font>
                   <Font name="Poppins Regular" size="12.0" />
                </font>
@@ -167,26 +222,52 @@
                   </ImageView>
                </graphic>
             </JFXButton>
-            <JFXButton fx:id="exportButton" layoutX="463.0" layoutY="631.0" prefHeight="55.0" prefWidth="118.0" style="-fx-background-color: rgba(30,41,59,0.8); -fx-background-radius: 16; -fx-border-color: rgba(99,102,241,0.5); -fx-border-radius: 16; -fx-cursor: hand;" text="EXPORT" textFill="WHITE">
+            <!-- Find & Replace toggle button -->
+            <JFXButton fx:id="findReplaceButton" contentDisplay="TOP" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="166.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Find" textFill="rgba(200,200,255,0.9)">
+               <font>
+                  <Font name="Poppins Regular" size="12.0" />
+               </font>
+                <graphic>
+                   <SVGPath content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="#22D3EE" scaleX="1.5" scaleY="1.5"/>
+                </graphic>
+            </JFXButton>
+            <!-- Text-to-Speech button -->
+            <JFXButton fx:id="ttsButton" contentDisplay="TOP" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="246.0" prefHeight="81.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Speak" textFill="rgba(200,200,255,0.9)">
+               <font>
+                  <Font name="Poppins Regular" size="12.0" />
+               </font>
+                <graphic>
+                   <SVGPath fx:id="ttsIcon" content="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="#22D3EE" scaleX="1.5" scaleY="1.5"/>
+                </graphic>
+             </JFXButton>
+            <JFXButton fx:id="exportButton" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" prefHeight="55.0" prefWidth="118.0" style="-fx-background-color: rgba(30,41,59,0.8); -fx-background-radius: 16; -fx-border-color: rgba(99,102,241,0.5); -fx-border-radius: 16; -fx-cursor: hand;" text="EXPORT" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="16.0" />
                </font>
             </JFXButton>
          </children>
       </AnchorPane>
+      </HBox>
+
+      <!-- Connection toast notification -->
+      <VBox fx:id="connectionToast" visible="false" managed="false" AnchorPane.topAnchor="10.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" style="-fx-background-color: rgba(34,197,94,0.12); -fx-background-radius: 14; -fx-border-color: rgba(34,197,94,0.45); -fx-border-radius: 14; -fx-padding: 10 18; -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.25), 30, 0, 0, 0);" alignment="CENTER">
+         <Label text="✓ Phone camera connected" textFill="#22c55e" style="-fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-font-weight: bold;" />
+      </VBox>
 
       <!-- Language selector -->
-      <ImageView fitHeight="34.0" fitWidth="30.0" layoutX="1203.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true" opacity="0.85">
-         <image>
-            <Image url="@../images/language_480px.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="1243.0" layoutY="51.0" text="language" textFill="rgba(200,200,255,0.85)">
-         <font>
-            <Font name="Poppins Regular" size="16.0" />
-         </font>
-      </Label>
-      <JFXComboBox fx:id="languageBox" focusColor="#6366F1" layoutX="1333.0" layoutY="48.0" prefHeight="25.0" prefWidth="77.0" promptText="Sinhala" style="-fx-text-fill: white;" unFocusColor="rgba(99,102,241,0.4)" visibleRowCount="3" />
+      <HBox spacing="8.0" alignment="CENTER" AnchorPane.topAnchor="48.0" AnchorPane.rightAnchor="30.0">
+         <ImageView fitHeight="34.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" opacity="0.85">
+            <image>
+               <Image url="@../images/language_480px.png" />
+            </image>
+         </ImageView>
+         <Label text="language" textFill="rgba(200,200,255,0.85)">
+            <font>
+               <Font name="Poppins Regular" size="16.0" />
+            </font>
+         </Label>
+         <JFXComboBox fx:id="languageBox" focusColor="#6366F1" prefHeight="35.0" prefWidth="110.0" promptText="Select language" style="-fx-font-family: 'Poppins'; -fx-font-size: 14px; -fx-text-fill: white;" unFocusColor="rgba(99,102,241,0.4)" visibleRowCount="4" />
+      </HBox>
 
    </children>
 </AnchorPane>

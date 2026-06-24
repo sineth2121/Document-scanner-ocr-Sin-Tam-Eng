@@ -5,7 +5,7 @@ param(
 
 if (-not $version) { $version = '3.9.6' }
 
-$root = [System.IO.Path]::GetFullPath($rootPath)
+$root = [System.IO.Path]::GetFullPath($rootPath.Trim('"').Trim("'"))
 $mvnDir = Join-Path -Path $root -ChildPath ".mvn\apache-maven"
 if (-not (Test-Path -Path $mvnDir)) {
     New-Item -ItemType Directory -Path (Join-Path -Path $root -ChildPath '.mvn') | Out-Null
